@@ -989,9 +989,9 @@ window.ethereum.on("chainChanged", async () => {
 window.ethereum.on("accountsChanged", async () => {
   const result = await ConnectWallet();
   if (result) {
-    connectWalletBtn.textContent =
-      result.slice(0, 5) + "..." + result.slice(35, -1);
     location.reload();
+    connectWalletBtn.textContent =
+    result.slice(0, 5) + "..." + result.slice(35, -1);
   }
 });
 
@@ -1772,7 +1772,9 @@ checkAccountLogged().then((contaCriada) => {
           requestsBtnAccept[i].addEventListener("click", () => {
             acceptPendingRequest(i)
               .then((res) => {
+                alert("Pedido de amizade aceito!")
                 console.log(res);
+                location.reload();
               })
               .catch((err) => {
                 console.log(err);
@@ -1785,7 +1787,7 @@ checkAccountLogged().then((contaCriada) => {
           requestsBtnDeny[i].addEventListener("click", () => {
             denyPendingRequest(i)
               .then((res) => {
-                alert("Pedido negado!");
+                alert("Pedido de amizade negado!");
                 console.log(res);
               })
               .catch((err) => {
