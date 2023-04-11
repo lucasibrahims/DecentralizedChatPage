@@ -990,8 +990,6 @@ window.ethereum.on("accountsChanged", async () => {
   const result = await ConnectWallet();
   if (result) {
     location.reload();
-    connectWalletBtn.textContent =
-    result.slice(0, 5) + "..." + result.slice(35, -1);
   }
 });
 
@@ -1017,6 +1015,11 @@ const ConnectWallet = async () => {
     return false;
   }
 };
+
+ConnectWallet().then((result) => {
+    connectWalletBtn.textContent =
+    result.slice(0, 5) + "..." + result.slice(35, -1);
+});
 
 async function checkAccountLogged() {
   if (ConnectWallet()) {
