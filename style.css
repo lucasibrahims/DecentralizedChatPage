@@ -1,423 +1,535 @@
 * {
-    margin: 0px;
-    box-sizing: border-box;
-    padding: 0px;
-    font-family: Arial, Helvetica, sans-serif;
+  margin: 0px;
+  box-sizing: border-box;
+  padding: 0px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 html,
 body {
-
-    height: 100%;
+  height: 100%;
 }
 
 .container {
-    width: 80%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.4);
-    background-color: dodgerblue;
-
-
+  width: 80%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.4);
+  background-color: dodgerblue;
 }
 
 #friendAddress {
-    color: #fff;
-    font-size: 12px;
-    padding: 10px;
+  color: #fff;
+  font-size: 12px;
+  padding: 10px;
 }
 
 #accountNickname {
-    color: #fff;
-    padding: 10px;
+  color: #fff;
+  padding: 10px;
 }
 
 .body {
-    flex: 1;
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 20px 30px;
-    overflow-y: auto;
+  flex: 1;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px 30px;
+  overflow-y: auto;
 }
 
 .message {
-    font-size: 15px;
-    font-weight: bold;
-    background-color: dodgerblue;
-    padding: 10px;
-    color: rgba(0, 0, 0, 0.687);
-    width: fit-content;
-    border-radius: 10px;
-    margin-bottom: 15px;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: dodgerblue;
+  padding: 10px;
+  color: rgba(0, 0, 0, 0.687);
+  width: fit-content;
+  border-radius: 10px;
+  margin-bottom: 15px;
 }
 
 .user_message {
-    font-size: 15px;
-    font-weight: bold;
-    margin-left: auto;
-    background-color: rgb(20, 187, 118);
-    color: rgba(0, 0, 0, 0.687);
-    width: fit-content;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    padding: 10px;
-    text-align: right;
+  font-size: 15px;
+  font-weight: bold;
+  margin-left: auto;
+  background-color: rgb(20, 187, 118);
+  color: rgba(0, 0, 0, 0.687);
+  width: fit-content;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  padding: 10px;
+  text-align: right;
 }
+
 .message-text {
-    color: black;
-    font-size: 20px;
-    font-style: normal;
-    font-weight:lighter;
-    padding-top: 3px;
+  color: black;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: lighter;
+  padding-top: 3px;
 }
 
 .footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
 }
 
 .footer input {
-    border-radius: 4px;
-    border: none;
-    outline: 0px;
-    padding: 4px;
-    display: block;
-    width: 100%;
-    margin: 5px;
-
+  border-radius: 4px;
+  border: none;
+  outline: 0px;
+  padding: 4px;
+  display: block;
+  width: 100%;
+  margin: 5px;
 }
 
 .footer button {
-    padding: 10px;
-    border-radius: 50px;
-    border: solid;
-    border-color: rgb(1, 233, 233);
-    border-width: 2px;
-    background-color: rgb(1, 233, 233);
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-    color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 50px;
+  border: solid;
+  border-color: rgb(1, 233, 233);
+  border-width: 2px;
+  background-color: rgb(1, 233, 233);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .footer button:hover {
-    background-color: dodgerblue;
-    color: rgb(1, 233, 233);
+  background-color: dodgerblue;
+  color: rgb(1, 233, 233);
 }
 
 .footer button:active {
-    background-color: blue;
+  background-color: blue;
 }
 
 .caixa {
-    display: flex;
+  display: flex;
 
-    height: 90%;
-
+  height: 90%;
+}
+.area2 {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: rgb(22, 22, 115);
 }
 
 .areaContatos {
-    width: 150px;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background-color: rgb(22, 22, 115);
-    overflow-y: auto;
-    height: 100%;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: rgb(8, 0, 81);
+  overflow-y: auto;
+  height: 100%;
 }
 
 .contactsBtn {
-    padding: 12px;
-    font-size: 15px;
-    margin-bottom: 4px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: dodgerblue;
-    cursor: pointer;
+  padding: 12px;
+  font-size: 15px;
+  margin-bottom: 4px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: dodgerblue;
+  cursor: pointer;
 }
 
 .contactsBtn:hover {
-    background-color: rgb(66, 161, 255);
+  background-color: rgb(66, 161, 255);
 }
 
 .groupsBtn {
-    color: #fff;
-    padding: 12px;
-    font-size: 15px;
-    margin-bottom: 4px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: rgb(8, 0, 81);
-    cursor: pointer;
+  color: #fff;
+  padding: 12px;
+  font-size: 15px;
+  margin-bottom: 4px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(8, 0, 81);
+  cursor: pointer;
 }
 
 .groupsBtn:hover {
-    background-color: rgb(21, 12, 104);
+  background-color: rgb(21, 12, 104);
 }
 
-
 .cabecalho {
-    display: flex;
-    background-color: rgb(96, 159, 222);
-    padding: 16px;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 38px;
-    font-weight: bold;
-
-
+  display: flex;
+  background-color: rgb(96, 159, 222);
+  padding: 16px;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 38px;
+  font-weight: bold;
 }
 
 .cabecalho img {
-    width: 50px;
+  width: 50px;
 }
 
 #connectWalletBtn {
-    font-size: 16px;
-    padding: 8px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: black;
-    font-weight: bold;
-    border-radius: 4px;
-    background-color: black;
-    color: rgb(96, 159, 222);
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+  font-size: 16px;
+  padding: 8px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color: black;
+  color: rgb(96, 159, 222);
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 #connectWalletBtn:hover {
-    background-color: rgb(96, 159, 222);
-    color: black;
+  background-color: rgb(96, 159, 222);
+  color: black;
 }
 
 #connectWalletBtn:active {
-    color: yellow;
-    border-color: yellow;
+  color: yellow;
+  border-color: yellow;
 }
 
 .campo {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .areaRequests {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background-color: rgb(8, 0, 81);
-    height: 111%;
-
-
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: rgb(22, 22, 115);
+  height: 111%;
 }
 
 .add-friend {
-    align-items: center;
-    width: 200px;
-    height: 111%;
-    display: flex;
-    flex-direction: column;
-    background-color: dodgerblue;
-
+  align-items: center;
+  width: 200px;
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  background-color: dodgerblue;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 6px;
 }
-.create-group {
-    align-items: center;
-    width: 200px;
-    height: 111.15%;
-    display: flex;
-    flex-direction: column;
-    background-color: rgb(8, 0, 81);
 
+.create-group {
+  align-items: center;
+  width: 200px;
+  max-height: fit-content;
+  display: flex;
+  flex-direction: column;
+  background-color: dodgerblue;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 6px;
 }
 
 .requestsBtn {
-    padding: 15px;
-    font-size: 15px;
-    margin-bottom: 4px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: rgb(1, 233, 233);
-    cursor: pointer;
+  padding: 15px;
+  font-size: 15px;
+  margin-bottom: 4px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(1, 233, 233);
+  cursor: pointer;
 }
 
 .requestsBtn:hover {
-    background-color: rgb(106, 175, 175);
+  background-color: rgb(106, 175, 175);
 }
 
 .input {
-    padding: 10px;
-    width: 150px;
-    font-size: 15px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: rgb(255, 255, 255);
-    text-align: center;
+  padding: 10px;
+  width: 150px;
+  font-size: 15px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(255, 255, 255);
+  text-align: center;
 }
 
 #title {
-    padding: 5px;
-    font-size: 15px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
-    background-color: rgb(255, 255, 255);
+  padding: 5px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
 }
 
 .buttons {
-    color: #fff;
-    padding: 15px;
-    width: 150px;
-    font-size: 15px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: rgb(8, 0, 81);
-    cursor: pointer;
-    text-align: center;
-    margin: 3px;
+  color: #fff;
+  padding: 15px;
+  width: 150px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(8, 0, 81);
+  cursor: pointer;
+  text-align: center;
+  margin: 3px;
 }
 
 .requests {
-    padding: 15px;
-    font-size: 20px;
-    margin-bottom: 4px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: rgb(1, 233, 233);
-    flex-direction: column;
-    display: flex;
-    text-align: center;
+  padding: 15px;
+  font-size: 20px;
+  margin-bottom: 4px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(1, 233, 233);
+  flex-direction: column;
+  display: flex;
+  text-align: center;
 }
 
-
-#create-group-btn, #add-member-btn {
-    color: #fff;
-    padding: 15px;
-    width: 150px;
-    font-size: 15px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: dodgerblue;
-    cursor: pointer;
-    text-align: center;
-    margin: 3px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-#create-group-btn:hover, #add-member-btn:hover {
-    background-color: rgb(38, 28, 129);
-}
-
-.requestsBtnAccept{
-    padding: 3px;
-    margin: 2px;
-    font-size: 15px;
-    border-radius: 20px;
-    border: none;
-    background-color: green;
-    cursor: pointer;
-    color: white;
-    width: 50px;
-    height: 30px;
+.requestsBtnAccept {
+  padding: 3px;
+  margin: 2px;
+  font-size: 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: green;
+  cursor: pointer;
+  color: white;
+  width: 50px;
+  height: 30px;
 }
 
 .requestsBtnAccept:hover {
-    background-color: white;
-    cursor: pointer;
-    color: black;
-    width: 50px;
-    height: 30px;
+  background-color: white;
+  cursor: pointer;
+  color: black;
+  width: 50px;
+  height: 30px;
 }
 
 .requestsBtnDeny {
-    padding: 3px;
-    margin: 2px;
-    font-size: 15px;
-    border-radius: 20px;
-    border: none;
-    background-color: red;
-    cursor: pointer;
-    color: white;
-    width: 50px;
-    height: 30px;
+  padding: 3px;
+  margin: 2px;
+  font-size: 15px;
+  border-radius: 20px;
+  border: none;
+  background-color: red;
+  cursor: pointer;
+  color: white;
+  width: 50px;
+  height: 30px;
 }
 
 .requestsBtnDeny:hover {
-    background-color: white;
-    cursor: pointer;
-    color: black;
-    width: 50px;
-    height: 30px;
+  background-color: white;
+  cursor: pointer;
+  color: black;
+  width: 50px;
+  height: 30px;
 }
 
 .input {
-    padding: 10px;
-    width: 150px;
-    height: fit-content;
-    font-size: 15px;
-    margin-top: 15px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: rgb(255, 255, 255);
-    text-align: center;
+  padding: 10px;
+  width: 150px;
+  height: fit-content;
+  font-size: 15px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(255, 255, 255);
+  text-align: center;
 }
+
 #title {
-    padding: 5px;
-    font-size: 15px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
-    background-color: rgb(255, 255, 255);
+  padding: 5px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
 }
+
+#title2 {
+  padding: 5px;
+  font-size: 15px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  background-color: rgb(255, 255, 255);
+}
+
 .buttons {
-    color: #fff;
-    padding: 15px;
-    width: 150px;
-    font-size: 15px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    background-color: rgb(8, 0, 81);
-    cursor: pointer;
-    text-align: center;
-    margin: 3px;
-    transition: background-color 0.3s, color 0.3s;
+  color: #fff;
+  padding: 15px;
+  width: 150px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: rgb(8, 0, 81);
+  cursor: pointer;
+  text-align: center;
+  margin: 3px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .buttons:hover {
-    background-color: rgb(38, 28, 129);
+  background-color: rgb(38, 28, 129);
 }
 
 .user_date {
-    color: rgb(255, 255, 255);
-    font-size: 10px;
-    text-align: right;
+  color: rgb(255, 255, 255);
+  font-size: 10px;
+  text-align: right;
 }
 
-.date{
-    color: rgb(255, 255, 255);
-    font-size: 10px;
-    text-align: left;
+.date {
+  color: rgb(255, 255, 255);
+  font-size: 10px;
+  text-align: left;
 }
 
+.erc20 {
+  align-items: center;
+  width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(22, 22, 115);
+}
 
+.deploy {
+  text-align: center;
+  align-items: center;
+  width: 260px;
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+  background-color: dodgerblue;
+  margin: 10px;
+  border-radius: 6px;
+  padding: 10px;
+}
 
+.my-erc20 {
+  align-items: center;
+  width: 260px;
+  height: 550px;
+  max-height: 550px;
+  display: flex;
+  flex-direction: column;
+  background-color: dodgerblue;
+  margin: 10px;
+  border-radius: 6px;
+  overflow-y: auto;
+  word-wrap: break-word;
+  padding: 10px;
+}
+
+.contract {
+  align-items: left;
+  width: 200px;
+  max-height: max-content;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(255, 255, 255);
+  margin: 10px;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.contract-name {
+  font-size: 20px;
+  font-weight: bold;
+  background-color: rgb(8, 0, 81);
+  color: white;
+  border-radius: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: fit-content;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.info-title {
+  font-weight: bold;
+  padding-top: 10px;
+}
+
+.swapSection {
+  width: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: center;
+  background-color: rgb(22, 22, 115);
+}
+
+.registerPoolContainer {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: center;
+  background-color: #218efa;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+#registerPoolBtn {
+  margin-top: px;
+  color: #fff;
+  padding: 15px;
+  width: 150px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  background-color: #0f1d51;
+  cursor: pointer;
+  text-align: center;
+  margin: 3px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#registerPoolBtn:hover {
+  background-color: rgb(38, 28, 129);
+}
+
+.swapTitle {
+  padding: 3px;
+  font-size: 20px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+.classe0 {
+  width: 0px;
+  height: 0px;
+}

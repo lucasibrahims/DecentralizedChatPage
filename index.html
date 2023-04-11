@@ -16,8 +16,32 @@
         <button id="connectWalletBtn">Conect wallet</button>
     </div>
     <div class="caixa">
-        <div id="areaDeContatos" class="areaContatos">
+        <div class="area2">
+            <div class="add-friend">
+                <p id="title2">Create Account</p>
+                <input class="input" type="text" placeholder="Your name" id="create-account-inp">
+                <button class="buttons" id="create-account-btn">Create Account</button>
+                <input class="input" type="text" placeholder="Paste the Address" id="add-friend-inp">
+                <button class="buttons" id="add-friend-btn">Send friend request</button>
+            </div>
+            <div class="create-group">
+                <p id="title2">Create Group</p>
+
+                <input class="input" type="text" placeholder="Group Name" id="name-group-inp">
+                <button class="buttons" id="create-group-btn">Create Group</button>
+                <input class="input" type="text" placeholder="Paste the Address" id="add-member-inp">
+                <button class="buttons" id="add-member-btn">Add Member</button>
+
+            </div>
+        </div>
+        <div id="areaDeContatos" class="classe0">
             <p id="title">Friends and Groups</p>
+
+        </div>
+        <div class="caixa">
+            <div id="areaDeRequests" class="classe0">
+                <p id="title">Requests</p>
+            </div>
         </div>
         <div class="container">
             <div class="header">
@@ -34,27 +58,18 @@
             </div>
         </div>
         <div class="campo">
-            <div class="caixa">
-                <div id="areaDeRequests" class="areaRequests">
-                    <p id="title">Requests</p>
-                </div>
-                    <div class="add-friend">
-                        
-                        <input class="input" type="text" placeholder="Your name" id="create-account-inp">
-                        <button class="buttons" id="create-account-btn">Create Account</button>
-                        <input class="input" type="text" placeholder="Paste the Address" id="add-friend-inp">
-                        <button class="buttons" id="add-friend-btn">Send friend request</button>
-                    
-                    </div>
-                    <div class="create-group">
-                        
-                        <input class="input" type="text" placeholder="Group Name" id="name-group-inp">
-                        <button class="buttons" id="create-group-btn">Create Group</button>
-                        <input class="input" type="text" placeholder="Paste the Address" id="add-member-inp">
-                        <button class="buttons" id="add-member-btn">Add Member</button>
-                    
-                    </div>
 
+        </div>
+        <div class="erc20">
+            <div class="deploy">
+                <h1 id="title2">Deploy an ERC20</h1>
+                <input class="input" type="text" placeholder="Name" id="name-erc20-inp">
+                <input class="input" type="text" placeholder="Symbol" id="symbol-erc20-inp">
+                <input class="input" type="number" placeholder="Inicial Supply" id="inicialSupply-erc20-inp">
+                <button class="buttons" id="deploy-erc20-btn">Deploy</button>
+            </div>
+            <div class="my-erc20" id="my-erc20">
+                <h1 id="title2">My ERC20's</h1>
 
             </div>
         </div>
@@ -62,7 +77,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.2.7/web3.min.js"
             integrity="sha512-yAmmVkOXqtDZRaueLdmLwMB67JtaRtjFzQGiAiJKvLiFlDvq4Tzm5R6uLcOMyvPRQlXpYHdYxc5IbiCwuquhUw=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="./script.js"></script>
+        <script src="./script.js" type="module"></script>
 </body>
 
 </html>
