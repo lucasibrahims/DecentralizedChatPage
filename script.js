@@ -939,12 +939,10 @@ const contractGroupABI = [
       "type": "function"
     }
   ];
-const contractGroupChatAddress = "0xD8Ed973DAFcbc1034872F64167791D8ac778D11b";
-const contractGroupAddress = "0x57C9D52a9113deEe5800a83d7703AEC310E20298";
-const contractTokenFactoryAddress = "0xa8884Da543446490126194Ae2f7B51af1D85B74B";
-const correctNetworkId = 4002;
-
-
+const contractGroupChatAddress = "0x16c19851cBF6b19692572BfBc5c3f16cbbD1c2ef";
+const contractGroupAddress = "0x10fFE280f885634d580B002bf346a745889aF8e5";
+const contractTokenFactoryAddress = "0x46225cc095a4A9a121Ed23FaD303046d41E70A35";
+const correctNetworkId = await web3.eth.net.getId();
 //\Dados Contrato
 //ELEMENTOS HTML
 const sendMsgBtn = document.getElementById("sendMsgBtn");
@@ -965,7 +963,9 @@ const addMemberInput = document.getElementById("add-member-inp");
 const footer = document.getElementById("footer");
 const erc20NameInput = document.getElementById("name-erc20-inp");
 const erc20SymbolInput = document.getElementById("symbol-erc20-inp");
-const erc20InicialSupplyInput = document.getElementById("inicialSupply-erc20-inp");
+const erc20InicialSupplyInput = document.getElementById(
+  "inicialSupply-erc20-inp"
+);
 const erc20DeployBtn = document.getElementById("deploy-erc20-btn");
 const erc20Zone = document.getElementById("my-erc20");
 
@@ -983,15 +983,20 @@ window.ethereum.on("chainChanged", async () => {
   const currentChainId = await web3.eth.net.getId();
   if (currentChainId !== correctNetworkId) {
     alert("Please, switch to the right network!");
+    await readMessages();
   }
 });
 
 window.ethereum.on("accountsChanged", async () => {
+location.reload()
   const result = await ConnectWallet();
   if (result) {
-    location.reload();
+      await readMessages();
   }
-});
+})
+
+
+
 
 //async functions (solidity)
 const ConnectWallet = async () => {
@@ -1002,6 +1007,7 @@ const ConnectWallet = async () => {
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
+        connectWalletBtn.textContent = accounts[0].slice(0, 5) + "..." + accounts[0].slice(35, -1);
         return accounts[0];
       } catch (err) {
         throw new Error("There is an error!");
@@ -1015,11 +1021,6 @@ const ConnectWallet = async () => {
     return false;
   }
 };
-
-ConnectWallet().then((result) => {
-    connectWalletBtn.textContent =
-    result.slice(0, 5) + "..." + result.slice(35, -1);
-});
 
 async function checkAccountLogged() {
   if (ConnectWallet()) {
@@ -1156,7 +1157,6 @@ async function sendFriendRequest(_to) {
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
-
     const instanceGroupChat = new web3.eth.Contract(
       contractGroupChatABI,
       contractGroupChatAddress
@@ -1279,18 +1279,11 @@ async function getGroupMembers(id) {
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-      const instanceGroup = new web3.eth.Contract(
-        contractGroupABI,
-        contractGroupAddress
-      );
-      let sendCall = await instanceGroup.methods
-        .getGroupMembers(id)
-        .call({ from: accounts[0] });
+      const instanceGroup = new web3.eth.Contract(contractGroupABI, contractGroupAddress);
+      let sendCall = await instanceGroup.methods.getGroupMembers(id).call({ from: accounts[0] });
       let members = [];
-      for (let i = 0; i < call.length; i++) {
-        let userName = await instanceGroup.methods
-          .getUserName(sendCall[i])
-          .call({ from: accounts[0] });
+      for (let i = 0; i < sendCall.length; i++) {
+        let userName = await instanceGroup.methods.getUserName(sendCall[i]).call({ from: accounts[0] });
         members.push(userName);
       }
       return members;
@@ -1566,390 +1559,412 @@ async function getTotalSupplyErc20(_erc20Address) {
     alert("Please Install Metamask");
   }
 }
+const readMessages = async () => {
+  const accounts = await window.ethereum.request({
+    method: "eth_requestAccounts",
+  })
+  const contractInstance = new web3.eth.Contract(contractGroupChatABI, contractGroupChatAddress);
+  contractInstance.events.MessageSent({}, async (error, event) => {
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    if (accounts[0].toLowerCase() === event.returnValues.to.toLowerCase()) {
+      console.log(event);
+      console.log(accounts[0]);
+      console.log(event.returnValues[1]);
+      console.log(typeof accounts[0]);
+      console.log(typeof event.returnValues[1]);
+      getUserName(event.returnValues.from).then((userName) => {
+        alert(`You have a new message from ${userName}`);
+      });
+
+      //alert("");
+    }
+  });
+};
 
 //cria os botoes de contatos
 checkAccountLogged().then((contaCriada) => {
-  if (contaCriada) {
-    getGroups().then((groupsList) => {
-      getFriends().then((friendsList) => {
-        if (groupsList != undefined)
-          contactsNumber = friendsList.length + groupsList.length;
-
-        if (contactsNumber > 0) areaDeContatos.className = "areaContatos";
-
-        if (groupsList.length > 0) {
-          var sentButtonGroup = document.createElement("button");
-          sentButtonGroup.id = "sendMsgBtn";
-          sentButtonGroup.innerHTML = "SEND TO GROUP";
-          footer.appendChild(sentButtonGroup);
-        }
-        for (let i = 0; i < friendsList.length; i++) {
-          friendsBtn[i] = document.createElement("button");
-          friendsBtn[i].className = "contactsBtn";
-          friendsBtn[i].innerHTML = friendsList[i].userName;
-          areaDeContatos.appendChild(friendsBtn[i]);
-        }
-        for (let i = friendsList.length; i < contactsNumber; i++) {
-          friendsBtn[i] = document.createElement("button");
-          friendsBtn[i].className = "groupsBtn";
-          friendsBtn[i].innerHTML =
-            groupsList[i - friendsList.length].groupName;
-          areaDeContatos.appendChild(friendsBtn[i]);
-        }
-        if (groupsList.length > 0) {
-          sentButtonGroup.addEventListener("click", () => {
-            sendMessageToGroup(idToAdd, sendMsgInput.value)
-              .then(() => {})
-              .catch((error) => {
-                console.log(error);
-              });
-          });
-        }
-
-        //a partir dos clicks dos botoes
-
-        function loadChatLog(i) {
-          chatBox.innerHTML = "";
-          accountNickname.innerHTML = friendsList[i].userName;
-          friendAddress.innerHTML = friendsList[i].accountAddress;
-          readMessage(friendsList[i].accountAddress)
-            .then((conversa) => {
-              chatLog = conversa;
-              let mensagem = [];
-              let date = [];
-              for (let j = 0; j < chatLog.length; j++) {
-                mensagem[j] = document.createElement("p");
-                mensagem[j].innerHTML = chatLog[j]._msg;
-                date[j] = document.createElement("p");
-                let time = new Date(chatLog[j].timestamp * 1000);
-                time =
-                  time.toLocaleDateString() + " " + time.toLocaleTimeString();
-                date[j].innerHTML = time;
-                if (chatLog[j].sender == friendsList[i].accountAddress) {
-                  mensagem[j].className = "message";
-                  date[j].className = "date";
-                } else {
-                  mensagem[j].className = "user_message";
-                  date[j].className = "user_date";
-                }
-
-                chatBox.appendChild(mensagem[j]);
-                mensagem[j].appendChild(date[j]);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-
-        for (let i = 0; i < friendsList.length; i++) {
-          friendsBtn[i].addEventListener("click", () => {
-            loadChatLog(i);
-          });
-        }
-      });
-    });
-  }
-});
-
-checkAccountLogged().then((contaCriada) => {
-  if (contaCriada) {
-    getGroups().then((groupsList) => {
-      getFriends().then((friendsList) => {
-        if (groupsList != undefined)
-          contactsNumber = friendsList.length + groupsList.length;
-        for (let i = friendsList.length; i < contactsNumber; i++) {
-          friendsBtn[i].addEventListener("click", () => {
-            chatBox.innerHTML = "";
-            accountNickname.innerHTML =
+    if (contaCriada) {
+        
+      getGroups().then((groupsList) => {
+        getFriends().then((friendsList) => {
+          if (groupsList != undefined)
+            contactsNumber = friendsList.length + groupsList.length;
+  
+          if (contactsNumber > 0) areaDeContatos.className = "areaContatos";
+  
+          if (groupsList.length > 0) {
+            var sentButtonGroup = document.createElement("button");
+            sentButtonGroup.id = "sendMsgBtn";
+            sentButtonGroup.innerHTML = "SEND TO GROUP";
+            footer.appendChild(sentButtonGroup);
+          }
+          for (let i = 0; i < friendsList.length; i++) {
+            friendsBtn[i] = document.createElement("button");
+            friendsBtn[i].className = "contactsBtn";
+            friendsBtn[i].innerHTML = friendsList[i].userName;
+            areaDeContatos.appendChild(friendsBtn[i]);
+          }
+          for (let i = friendsList.length; i < contactsNumber; i++) {
+            friendsBtn[i] = document.createElement("button");
+            friendsBtn[i].className = "groupsBtn";
+            friendsBtn[i].innerHTML =
               groupsList[i - friendsList.length].groupName;
-            idToAdd = groupsList[i - friendsList.length].id;
-            getGroupMembers(groupsList[i - friendsList.length].id).then(
-              (members) => {
-                friendAddress.innerHTML = members;
-              }
-            );
-            readMessageGroup(groupsList[i - friendsList.length].id)
-              .then((conversa) => {
-                getAccountLogged()
-                  .then((contaLogada) => {
+            areaDeContatos.appendChild(friendsBtn[i]);
+          }
+          if (groupsList.length > 0) {
+            sentButtonGroup.addEventListener("click", () => {
+              sendMessageToGroup(idToAdd, sendMsgInput.value)
+                .then(() => {})
+                .catch((error) => {
+                  console.log(error);
+                });
+            });
+          }
+  
+          //a partir dos clicks dos botoes
+  
+  
+          for (let i = 0; i < friendsList.length; i++) {
+            friendsBtn[i].addEventListener("click", () => {
+                chatBox.innerHTML = "";
+                accountNickname.innerHTML = friendsList[i].userName;
+                friendAddress.innerHTML = friendsList[i].accountAddress;
+                readMessage(friendsList[i].accountAddress)
+                  .then((conversa) => {
                     chatLog = conversa;
-                    let sendersOf =
-                      groupsList[i - friendsList.length].senderOfEachMessage;
-                    let messageTimestamp =
-                      groupsList[i - friendsList.length].timestampOfEachMessage;
                     let mensagem = [];
-                    let timestamp = [];
-                    let nicknames = [];
+                    let date = [];
                     for (let j = 0; j < chatLog.length; j++) {
-                      console.log(sendersOf[j]);
-                      nicknames[j] = document.createElement("p");
-                      getUserName(sendersOf[j]).then((userName) => {
-                        nicknames[j].innerHTML = userName;
-                        nicknames[j].className = "message";
-                        mensagem[j] = document.createElement("p");
-                        mensagem[j].innerHTML = chatLog[j];
-                        mensagem[j].className = "message-text";
-                        nicknames[j].appendChild(mensagem[j]);
-                        timestamp[j] = document.createElement("p");
-                        let time = new Date(messageTimestamp[j] * 1000);
-                        time =
-                          time.toLocaleDateString() +
-                          " " +
-                          time.toLocaleTimeString();
-                        timestamp[j].innerHTML = time;
-                        timestamp[j].className = "date";
-                        nicknames[j].appendChild(timestamp[j]);
-                        if (
-                          sendersOf[j].toUpperCase() ==
-                          contaLogada.toUpperCase()
-                        ) {
-                          nicknames[j].className = "user_message";
-                          timestamp[j].className = "user_date";
-                        }
-
-                        chatBox.appendChild(nicknames[j]);
-                      });
+                      mensagem[j] = document.createElement("p");
+                      mensagem[j].innerHTML = chatLog[j]._msg;
+                      date[j] = document.createElement("p");
+                      let time = new Date(chatLog[j].timestamp * 1000);
+                      time =
+                        time.toLocaleDateString() + " " + time.toLocaleTimeString();
+                      date[j].innerHTML = time;
+                      if (chatLog[j].sender == friendsList[i].accountAddress) {
+                        mensagem[j].className = "message";
+                        date[j].className = "date";
+                      } else {
+                        mensagem[j].className = "user_message";
+                        date[j].className = "user_date";
+                      }
+      
+                      chatBox.appendChild(mensagem[j]);
+                      mensagem[j].appendChild(date[j]);
                     }
                   })
                   .catch((error) => {
                     console.log(error);
                   });
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          });
-        }
+            });
+          }
+        });
       });
-    });
-  }
-});
-//cria os botoes request
-checkAccountLogged().then((contaCriada) => {
-  if (contaCriada) {
-    getDenyRequests().then((denyRequests) => {
-      getPendingRequests().then((pendingRequests) => {
-
-        for (let i = 0; i < pendingRequests.length; i++) {
-          requests[i] = document.createElement("div");
-          requests[i].className = "requests";
-          requests[i].innerHTML = pendingRequests[i].name;
-          requestsBtnAccept[i] = document.createElement("button");
-          requestsBtnAccept[i].className = "requestsBtnAccept";
-          requestsBtnAccept[i].innerHTML = "SIM";
-          requestsBtnDeny[i] = document.createElement("button");
-          requestsBtnDeny[i].className = "requestsBtnDeny";
-          requestsBtnDeny[i].innerHTML = "NÃO";
-          let aceito = false;
-          getFriends().then((friendsList) => {
-            if (friendsList.length != undefined) {
-              for (let j = 0; j < friendsList.length; j++) {
-                if (
-                  pendingRequests[i].pubKey == friendsList[j].accountAddress
-                ) {
-                  aceito = true;
+    }
+  });
+  
+  checkAccountLogged().then((contaCriada) => {
+    if (contaCriada) {
+      getGroups().then((groupsList) => {
+        getFriends().then((friendsList) => {
+          if (groupsList != undefined)
+            contactsNumber = friendsList.length + groupsList.length;
+          for (let i = friendsList.length; i < contactsNumber; i++) {
+            friendsBtn[i].addEventListener("click", () => {
+              chatBox.innerHTML = "";
+              accountNickname.innerHTML =
+                groupsList[i - friendsList.length].groupName;
+              idToAdd = groupsList[i - friendsList.length].id;
+              getGroupMembers(groupsList[i - friendsList.length].id).then(
+                (members) => {
+                  friendAddress.innerHTML = members;
+                }
+              );
+              readMessageGroup(groupsList[i - friendsList.length].id)
+                .then((conversa) => {
+                  getAccountLogged()
+                    .then((contaLogada) => {
+                      chatLog = conversa;
+                      let sendersOf =
+                        groupsList[i - friendsList.length].senderOfEachMessage;
+                      let messageTimestamp =
+                        groupsList[i - friendsList.length].timestampOfEachMessage;
+                      let mensagem = [];
+                      let timestamp = [];
+                      let nicknames = [];
+                      for (let j = 0; j < chatLog.length; j++) {
+                        nicknames[j] = document.createElement("p");
+                        getUserName(sendersOf[j]).then((userName) => {
+                          nicknames[j].innerHTML = userName;
+                          nicknames[j].className = "message";
+                          mensagem[j] = document.createElement("p");
+                          mensagem[j].innerHTML = chatLog[j];
+                          mensagem[j].className = "message-text";
+                          nicknames[j].appendChild(mensagem[j]);
+                          timestamp[j] = document.createElement("p");
+                          let time = new Date(messageTimestamp[j] * 1000);
+                          time =
+                            time.toLocaleDateString() +
+                            " " +
+                            time.toLocaleTimeString();
+                          timestamp[j].innerHTML = time;
+                          timestamp[j].className = "date";
+                          nicknames[j].appendChild(timestamp[j]);
+                          if (
+                            sendersOf[j].toUpperCase() ==
+                            contaLogada.toUpperCase()
+                          ) {
+                            nicknames[j].className = "user_message";
+                            timestamp[j].className = "user_date";
+                          }
+  
+                          chatBox.appendChild(nicknames[j]);
+                        });
+                      }
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            });
+          }
+        });
+      });
+    }
+  });
+  //cria os botoes request
+  checkAccountLogged().then((contaCriada) => {
+    if (contaCriada) {
+      getDenyRequests().then((denyRequests) => {
+        getPendingRequests().then((pendingRequests) => {
+  
+          for (let i = 0; i < pendingRequests.length; i++) {
+            requests[i] = document.createElement("div");
+            requests[i].className = "requests";
+            requests[i].innerHTML = pendingRequests[i].name;
+            requestsBtnAccept[i] = document.createElement("button");
+            requestsBtnAccept[i].className = "requestsBtnAccept";
+            requestsBtnAccept[i].innerHTML = "SIM";
+            requestsBtnDeny[i] = document.createElement("button");
+            requestsBtnDeny[i].className = "requestsBtnDeny";
+            requestsBtnDeny[i].innerHTML = "NÃO";
+            let aceito = false;
+            getFriends().then((friendsList) => {
+              if (friendsList.length != undefined) {
+                for (let j = 0; j < friendsList.length; j++) {
+                  if (
+                    pendingRequests[i].pubKey == friendsList[j].accountAddress
+                  ) {
+                    aceito = true;
+                  }
                 }
               }
-            }
-            if (denyRequests.length != undefined) {
-              for (let j = 0; j < denyRequests.length; j++) {
-                if (pendingRequests[i].pubKey == denyRequests[j].pubKey) {
-                  aceito = true;
+              if (denyRequests.length != undefined) {
+                for (let j = 0; j < denyRequests.length; j++) {
+                  if (pendingRequests[i].pubKey == denyRequests[j].pubKey) {
+                    aceito = true;
+                  }
                 }
               }
-            }
-            if (!aceito) {
-              areaDeRequests.appendChild(requests[i]);
-              requests[i].appendChild(requestsBtnAccept[i]);
-              requests[i].appendChild(requestsBtnDeny[i]);
-              areaDeRequests.className = "areaRequests";
-              console.log(pendingRequests.length);
-        
-            }
-          });
-        }
-
-        //aceita os pedidos
-        for (let i = 0; i < requests.length; i++) {
-          requestsBtnAccept[i].addEventListener("click", () => {
-            acceptPendingRequest(i)
-              .then((res) => {
-                alert("Pedido de amizade aceito!")
-                console.log(res);
-                location.reload();
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-        }
-
-        //nega os pedidos
-        for (let i = 0; i < requests.length; i++) {
-          requestsBtnDeny[i].addEventListener("click", () => {
-            denyPendingRequest(i)
-              .then((res) => {
-                alert("Pedido de amizade negado!");
-                console.log(res);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-        }
+              if (!aceito) {
+                areaDeRequests.appendChild(requests[i]);
+                requests[i].appendChild(requestsBtnAccept[i]);
+                requests[i].appendChild(requestsBtnDeny[i]);
+                areaDeRequests.className = "areaRequests";
+                console.log(pendingRequests.length);
+          
+              }
+            });
+          }
+  
+          //aceita os pedidos
+          for (let i = 0; i < requests.length; i++) {
+            requestsBtnAccept[i].addEventListener("click", () => {
+              acceptPendingRequest(i)
+                .then((res) => {
+                  alert("Pedido de amizade aceito!")
+                  console.log(res);
+                  location.reload();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
+          }
+  
+          //nega os pedidos
+          for (let i = 0; i < requests.length; i++) {
+            requestsBtnDeny[i].addEventListener("click", () => {
+              denyPendingRequest(i)
+                .then((res) => {
+                  alert("Pedido de amizade negado!");
+                  console.log(res);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            });
+          }
+        });
       });
-    });
-  }
-});
-
-//criando os contratos
-let contracts = [];
-getAllErc20().then((contractsAddress) => {
-  for (let i = 0; i < contractsAddress.length; i++) {
-    getNameErc20(contractsAddress[i]).then((name) => {
-      getSymbolErc20(contractsAddress[i]).then((symbol) => {
-        getTotalSupplyErc20(contractsAddress[i]).then((totalSupply) => {
-          erc20BalanceOf(contractsAddress[i]).then((balanceOf) => {
-            contracts[i] = document.createElement("div");
-            contracts[i].className = "contract";
-            let contractName = document.createElement("p");
-            contractName.className = "contract-name";
-            contractName.innerHTML = name;
-            contracts[i].appendChild(contractName);
-            let contractTitleAddress = document.createElement("p");
-            contractTitleAddress.className = "info-title";
-            contractTitleAddress.innerHTML = "Address";
-            contracts[i].appendChild(contractTitleAddress);
-            let contractAddress = document.createElement("p");
-            contractAddress.className = "info";
-            contractAddress.innerHTML = contractsAddress[i];
-            contracts[i].appendChild(contractAddress);
-            let contractTitleSymbol = document.createElement("p");
-            contractTitleSymbol.className = "info-title";
-            contractTitleSymbol.innerHTML = "Symbol";
-            contracts[i].appendChild(contractTitleSymbol);
-            let contractSymbol = document.createElement("p");
-            contractSymbol.className = "info";
-            contractSymbol.innerHTML = symbol;
-            contracts[i].appendChild(contractSymbol);
-            let contractTitleTotalSupply = document.createElement("p");
-            contractTitleTotalSupply.className = "info-title";
-            contractTitleTotalSupply.innerHTML = "Total Supply";
-            contracts[i].appendChild(contractTitleTotalSupply);
-            let contractTotalSupply = document.createElement("p");
-            contractTotalSupply.className = "info";
-            contractTotalSupply.innerHTML = totalSupply / 10 ** 18;
-            contracts[i].appendChild(contractTotalSupply);
-            let contractTitleBalanceOf = document.createElement("p");
-            contractTitleBalanceOf.className = "info-title";
-            contractTitleBalanceOf.innerHTML = "Balance Of";
-            contracts[i].appendChild(contractTitleBalanceOf);
-            let contractBalanceOf = document.createElement("p");
-            contractBalanceOf.className = "info";
-            contractBalanceOf.innerHTML = balanceOf / 10 ** 18;
-            contracts[i].appendChild(contractBalanceOf);
-            erc20Zone.appendChild(contracts[i]);
+    }
+  });
+  
+  //criando os contratos
+  let contracts = [];
+  getAllErc20().then((contractsAddress) => {
+    for (let i = 0; i < contractsAddress.length; i++) {
+      getNameErc20(contractsAddress[i]).then((name) => {
+        getSymbolErc20(contractsAddress[i]).then((symbol) => {
+          getTotalSupplyErc20(contractsAddress[i]).then((totalSupply) => {
+            erc20BalanceOf(contractsAddress[i]).then((balanceOf) => {
+              contracts[i] = document.createElement("div");
+              contracts[i].className = "contract";
+              let contractName = document.createElement("p");
+              contractName.className = "contract-name";
+              contractName.innerHTML = name;
+              contracts[i].appendChild(contractName);
+              let contractTitleAddress = document.createElement("p");
+              contractTitleAddress.className = "info-title";
+              contractTitleAddress.innerHTML = "Address";
+              contracts[i].appendChild(contractTitleAddress);
+              let contractAddress = document.createElement("p");
+              contractAddress.className = "info";
+              contractAddress.innerHTML = contractsAddress[i];
+              contracts[i].appendChild(contractAddress);
+              let contractTitleSymbol = document.createElement("p");
+              contractTitleSymbol.className = "info-title";
+              contractTitleSymbol.innerHTML = "Symbol";
+              contracts[i].appendChild(contractTitleSymbol);
+              let contractSymbol = document.createElement("p");
+              contractSymbol.className = "info";
+              contractSymbol.innerHTML = symbol;
+              contracts[i].appendChild(contractSymbol);
+              let contractTitleTotalSupply = document.createElement("p");
+              contractTitleTotalSupply.className = "info-title";
+              contractTitleTotalSupply.innerHTML = "Total Supply";
+              contracts[i].appendChild(contractTitleTotalSupply);
+              let contractTotalSupply = document.createElement("p");
+              contractTotalSupply.className = "info";
+              contractTotalSupply.innerHTML = totalSupply / 10 ** 18;
+              contracts[i].appendChild(contractTotalSupply);
+              let contractTitleBalanceOf = document.createElement("p");
+              contractTitleBalanceOf.className = "info-title";
+              contractTitleBalanceOf.innerHTML = "Balance Of";
+              contracts[i].appendChild(contractTitleBalanceOf);
+              let contractBalanceOf = document.createElement("p");
+              contractBalanceOf.className = "info";
+              contractBalanceOf.innerHTML = balanceOf / 10 ** 18;
+              contracts[i].appendChild(contractBalanceOf);
+              erc20Zone.appendChild(contracts[i]);
+            });
           });
         });
       });
-    });
-  }
-});
-
-sendMsgBtn.addEventListener("click", async () => {
-  const result = await ConnectWallet();
-  if (result) {
-    sendMessage(friendAddress.innerHTML, sendMsgInput.value)
-      .then(async () => {})
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-});
-
-sendFriendRequestBtn.addEventListener("click", async () => {
-  const result = await ConnectWallet();
-  if (result) {
-    sendFriendRequest(sendFriendRequestInput.value)
-      .then((pedido) => {})
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-});
-accountCreationBtn.addEventListener("click", async () => {
-  const result = await ConnectWallet();
-  if (result) {
-    createAccount(accountCreationInput.value)
-      .then((contaCriada) => {
-        if (contaCriada) {
-          alert("Conta Criada!");
-        }
+    }
+  });
+  
+  sendMsgBtn.addEventListener("click", async () => {
+    const result = await ConnectWallet();
+    if (result) {
+      sendMessage(friendAddress.innerHTML, sendMsgInput.value)
+        .then(async () => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  });
+  
+  sendFriendRequestBtn.addEventListener("click", async () => {
+    const result = await ConnectWallet();
+    if (result) {
+      sendFriendRequest(sendFriendRequestInput.value)
+        .then((pedido) => {})
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  });
+  accountCreationBtn.addEventListener("click", async () => {
+    const result = await ConnectWallet();
+    if (result) {
+      createAccount(accountCreationInput.value)
+        .then((contaCriada) => {
+          if (contaCriada) {
+            alert("Conta Criada!");
+            location.reload();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  });
+  
+  connectWalletBtn.addEventListener("click", () => {
+    ConnectWallet()
+      .then((result) => {
+        connectWalletBtn.textContent =
+          result.slice(0, 5) + "..." + result.slice(35, -1);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
-  }
-});
-
-connectWalletBtn.addEventListener("click", () => {
-  ConnectWallet()
-    .then((result) => {
-      connectWalletBtn.textContent =
-        result.slice(0, 5) + "..." + result.slice(35, -1);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-createGroupBtn.addEventListener("click", async () => {
-  const result = await ConnectWallet();
-  if (result) {
-    createGroup(nameGroupInput.value)
-      .then((grupo) => {
-        if (grupo) {
-          alert("Group created!");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-});
-
-addMemberBtn.addEventListener("click", async () => {
-  const result = await ConnectWallet();
-  if (result) {
-    addMember(idToAdd, addMemberInput.value)
-      .then((res) => {
-        if (res) {
-          alert("MemberAdded");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-});
-
-erc20DeployBtn.addEventListener("click", async () => {
-  const result = await ConnectWallet();
-  if (result) {
-    deployERC20(
-      erc20NameInput.value,
-      erc20SymbolInput.value,
-      erc20InicialSupplyInput.value
-    )
-      .then((res) => {
-        if (res) {
-          alert("Deployed!");
-          location.reload();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-});
+  });
+  
+  createGroupBtn.addEventListener("click", async () => {
+    const result = await ConnectWallet();
+    if (result) {
+      createGroup(nameGroupInput.value)
+        .then((grupo) => {
+          if (grupo) {
+            alert("Group created!");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  });
+  
+  addMemberBtn.addEventListener("click", async () => {
+    const result = await ConnectWallet();
+    if (result) {
+      addMember(idToAdd, addMemberInput.value)
+        .then((res) => {
+          if (res) {
+            alert("MemberAdded");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  });
+  
+  erc20DeployBtn.addEventListener("click", async () => {
+    const result = await ConnectWallet();
+    if (result) {
+      deployERC20(
+        erc20NameInput.value,
+        erc20SymbolInput.value,
+        erc20InicialSupplyInput.value
+      )
+        .then((res) => {
+          if (res) {
+            alert("Deployed!");
+            location.reload();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  });
+  
